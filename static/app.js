@@ -10,11 +10,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
     }
+    
+    function initDashboard() {
+        // Load reports once dashboard is visible
+        loadReports();
+        
+        // Auto-refresh reports every 60 seconds (1 minute)
+        setInterval(() => {
+            console.log("Auto-refreshing reports...");
+            loadReports();
+        }, 60000);
+    }
 
     // Auto-bypass landing if already authenticated
     if (localStorage.getItem('clientEmail')) {
         landingScreen.classList.add('hidden');
         dashboardScreen.classList.add('visible');
+        initDashboard();
     }
 
     enterBtn.addEventListener('click', async () => {
@@ -54,14 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         landingScreen.classList.add('hidden');
         dashboardScreen.classList.add('visible');
         
-        // Load reports once dashboard is visible
-        loadReports();
-        
-        // Auto-refresh reports every 60 seconds (1 minute)
-        setInterval(() => {
-            console.log("Auto-refreshing reports...");
-            loadReports();
-        }, 60000);
+        initDashboard();
     });
 
     // Dashboard Logic
