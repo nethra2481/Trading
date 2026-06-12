@@ -139,15 +139,6 @@
                                 <div class="tradingview-widget-container__widget"></div>
                                 <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
                                 {
-                                  "colorTheme":"dark","isTransparent":true,
-                                  "width":"100%","height":"350","locale":"in",
-                                  "importanceFilter":"-1,0,1","countryFilter":"in,us"
-                                }
-                                </script>
-                            </div>
-                        </div>
-
-                        <div class="toolkit-panel">
                             <div class="toolkit-title">📡 Nifty Technicals</div>
                             <div class="tradingview-widget-container">
                                 <div class="tradingview-widget-container__widget"></div>
@@ -163,7 +154,54 @@
                         </div>
 
                         <div class="toolkit-panel">
-                            <div class="toolkit-title">🌡 Nifty 50 Heatmap</div>
+                            <div class="toolkit-title">🏦 Bank Nifty Technicals</div>
+                            <div class="tradingview-widget-container">
+                                <div class="tradingview-widget-container__widget"></div>
+                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                                {
+                                  "interval":"1D","width":"100%","isTransparent":true,
+                                  "height":"350","symbol":"NSE:BANKNIFTY",
+                                  "showIntervalTabs":true,"displayMode":"single",
+                                  "locale":"in","colorTheme":"dark"
+                                }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div class="toolkit-panel">
+                            <div class="toolkit-title">💹 Fin Nifty Technicals</div>
+                            <div class="tradingview-widget-container">
+                                <div class="tradingview-widget-container__widget"></div>
+                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                                {
+                                  "interval":"1D","width":"100%","isTransparent":true,
+                                  "height":"350","symbol":"NSE:FINNIFTY",
+                                  "showIntervalTabs":true,"displayMode":"single",
+                                  "locale":"in","colorTheme":"dark"
+                                }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: India VIX + Nifty Heatmap + Options Info -->
+                    <div class="toolkit-grid" style="margin-top:20px;">
+                        <div class="toolkit-panel">
+                            <div class="toolkit-title">🌡 India VIX — Options Volatility</div>
+                            <div class="tradingview-widget-container">
+                                <div class="tradingview-widget-container__widget"></div>
+                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
+                                {
+                                  "symbol":"NSE:INDIAVIX","width":"100%","height":"220",
+                                  "locale":"in","dateRange":"3M","colorTheme":"dark",
+                                  "isTransparent":true,"autosize":true,"largeChartUrl":""
+                                }
+                                </script>
+                            </div>
+                        </div>
+
+                        <div class="toolkit-panel">
+                            <div class="toolkit-title">🔥 Nifty 50 Heatmap</div>
                             <div class="tradingview-widget-container">
                                 <div class="tradingview-widget-container__widget"></div>
                                 <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
@@ -177,8 +215,43 @@
                                 </script>
                             </div>
                         </div>
+
+                        <div class="toolkit-panel options-info-panel">
+                            <div class="toolkit-title">⚡ Options Trading Signals</div>
+                            <div class="options-info-grid">
+                                <div class="info-block">
+                                    <div class="info-label">REPORT SCHEDULE</div>
+                                    <div class="info-value">9:00 AM IST</div>
+                                    <div class="info-sub">Daily PDF Delivery</div>
+                                </div>
+                                <div class="info-block">
+                                    <div class="info-label">DATA CAPTURE</div>
+                                    <div class="info-value">8:00 AM IST</div>
+                                    <div class="info-sub">Gift Nifty · Dow Futures · DXY · Crude</div>
+                                </div>
+                                <div class="info-block">
+                                    <div class="info-label">EXPIRY FOCUS</div>
+                                    <div class="info-value">Weekly CE/PE</div>
+                                    <div class="info-sub">Nearest Expiry · Nifty &amp; FNO</div>
+                                </div>
+                                <div class="info-block">
+                                    <div class="info-label">INTRADAY ANALYSIS</div>
+                                    <div class="info-value">9:30 AM IST</div>
+                                    <div class="info-sub">CNBC Awaaz · Pehla Sauda</div>
+                                </div>
+                                <div class="info-block">
+                                    <div class="info-label">STRATEGY FORMAT</div>
+                                    <div class="info-value">Leg-wise</div>
+                                    <div class="info-sub">Max Profit · Max Risk · Strike</div>
+                                </div>
+                                <div class="info-block">
+                                    <div class="info-label">AI MODEL</div>
+                                    <div class="info-value">Gemini 2.5</div>
+                                    <div class="info-sub">Flash · Real-time Analysis</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
                 <!-- Reports Section -->
                 <div class="reports-section">
