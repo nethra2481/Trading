@@ -169,7 +169,7 @@ def job_9am_send_nifty_fno_and_generate_intraday():
         print("Processing CNBC Awaaz Live...")
         # In a real scenario, this might involve downloading a stream or finding the latest video on their channel.
         # For now, we search for their latest morning live stream.
-        cnbc_videos = data_ingestion.get_top_youtube_videos("CNBC Awaaz Live", max_results=1)
+        cnbc_videos = data_ingestion.get_top_youtube_videos("CNBC Awaaz Morning Live Pehla Sauda", max_results=1)
         cnbc_transcript = "No transcript found for CNBC Awaaz."
         cnbc_video_digest = format_video_digest(cnbc_videos)
         if cnbc_videos:
@@ -218,9 +218,9 @@ if __name__ == "__main__":
     # NOTE: The system running this script needs to have its timezone set to IST, 
     # or the times below need to be adjusted to UTC or the server's local time.
     
-    schedule.every().day.at("08:00").do(job_8am_generate_nifty_fno)
-    schedule.every().day.at("09:00").do(job_9am_send_nifty_fno_and_generate_intraday)
-    schedule.every().day.at("09:30").do(job_930am_send_intraday)
+    schedule.every().day.at("08:00", "Asia/Kolkata").do(job_8am_generate_nifty_fno)
+    schedule.every().day.at("09:00", "Asia/Kolkata").do(job_9am_send_nifty_fno_and_generate_intraday)
+    schedule.every().day.at("09:30", "Asia/Kolkata").do(job_930am_send_intraday)
     
     print("Scheduler is running. Press Ctrl+C to exit.")
     

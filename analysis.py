@@ -167,7 +167,7 @@ def analyze_fno(transcripts, news, market_data, gift_nifty, video_digest=""):
 
 def analyze_intraday(transcript, video_digest=""):
     required_sections = [
-        "OVERALL VIEW FOR DAILY TRADING AND INTRADAY SCALPING",
+        "OVERALL VIEW FOR DAILY TRADING, INTRADAY TRADING AND SCALPING TRADING",
         "BEST BUY/SELL STRATEGY FOR CE/PE (LEG FORMAT)",
         "MAXIMUM PROFIT AND RISK ASSOCIATED",
     ]
@@ -186,7 +186,7 @@ def analyze_intraday(transcript, video_digest=""):
     Avoid vague wording. Use specific levels and clear action points.
 
     The report MUST include these sections in this exact order and exact spelling:
-    OVERALL VIEW FOR DAILY TRADING AND INTRADAY SCALPING
+    OVERALL VIEW FOR DAILY TRADING, INTRADAY TRADING AND SCALPING TRADING
     Summarize the general market sentiment and key actionable levels for intraday.
 
     BEST BUY/SELL STRATEGY FOR CE/PE (LEG FORMAT)

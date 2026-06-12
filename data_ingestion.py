@@ -109,7 +109,8 @@ def get_market_data():
         'Dow Jones Futures': 'YM=F',
         'Crude Oil': 'CL=F',
         'Dollar Index': 'DX-Y.NYB',
-        'US 10-Yr Bond Yield': '^TNX'
+        'US 10-Yr Bond Yield': '^TNX',
+        'India VIX': '^INDIAVIX'
     }
     for name, ticker in tickers.items():
         try:
