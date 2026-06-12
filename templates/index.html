@@ -107,6 +107,75 @@
                 </div>
             </div>
 
+            <!-- Ultimate Trader Toolkit Section -->
+            <div class="trader-toolkit-grid" style="margin-bottom: 40px;">
+                <!-- Economic Calendar -->
+                <div class="toolkit-panel glass-panel">
+                    <h3 class="toolkit-title">Macro Events</h3>
+                    <div class="tradingview-widget-container">
+                      <div class="tradingview-widget-container__widget"></div>
+                      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+                      {
+                      "colorTheme": "dark",
+                      "isTransparent": true,
+                      "width": "100%",
+                      "height": "350",
+                      "locale": "in",
+                      "importanceFilter": "-1,0,1",
+                      "countryFilter": "in,us"
+                    }
+                      </script>
+                    </div>
+                </div>
+
+                <!-- Technical Analysis Gauge -->
+                <div class="toolkit-panel glass-panel">
+                    <h3 class="toolkit-title">Nifty 50 Technicals</h3>
+                    <div class="tradingview-widget-container">
+                      <div class="tradingview-widget-container__widget"></div>
+                      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                      {
+                      "interval": "1D",
+                      "width": "100%",
+                      "isTransparent": true,
+                      "height": "350",
+                      "symbol": "NSE:NIFTY",
+                      "showIntervalTabs": true,
+                      "displayMode": "single",
+                      "locale": "in",
+                      "colorTheme": "dark"
+                    }
+                      </script>
+                    </div>
+                </div>
+
+                <!-- Market Heatmap -->
+                <div class="toolkit-panel glass-panel">
+                    <h3 class="toolkit-title">Nifty 50 Heatmap</h3>
+                    <div class="tradingview-widget-container">
+                      <div class="tradingview-widget-container__widget"></div>
+                      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+                      {
+                      "exchanges": ["NSE"],
+                      "dataSource": "NIFTY50",
+                      "grouping": "sector",
+                      "blockSize": "market_cap_basic",
+                      "blockColor": "change",
+                      "locale": "in",
+                      "symbolUrl": "",
+                      "colorTheme": "dark",
+                      "hasTopBar": false,
+                      "isDataSetEnabled": false,
+                      "isZoomEnabled": true,
+                      "hasSymbolTooltip": true,
+                      "width": "100%",
+                      "height": "350"
+                    }
+                      </script>
+                    </div>
+                </div>
+            </div>
+
             <!-- Section Title for Reports -->
             <div class="section-title" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
                 <h3 style="font-size: 1.2rem; font-weight: 600; color: #fff;">Algorithmic Research PDFs</h3>
