@@ -1,0 +1,10 @@
+google-api-python-client
+youtube-transcript-api
+google-genai
+yfinance
+gnews
+fpdf2
+schedule
+beautifulsoup4
+requests
+python-dotenv
