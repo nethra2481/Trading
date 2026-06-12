@@ -168,9 +168,27 @@ html, body {
     text-align: center;
 }
 
+/* Landing badges */
+.landing-badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.badge {
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #93c5fd;
+    white-space: nowrap;
+}
+
 /* ===== DASHBOARD ===== */
 #dashboard-screen {
-    display: block;
+    display: none;
     min-height: 100vh;
     position: relative;
     z-index: 1;

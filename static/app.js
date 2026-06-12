@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    const landingScreen = document.getElementById('landing-screen');
+    const dashboardScreen = document.getElementById('dashboard-screen');
+    const enterBtn = document.getElementById('enter-btn');
     const reportsGrid = document.getElementById('reports-grid');
     const navItems = document.querySelectorAll('.nav-item');
     const modal = document.getElementById('pdf-modal');
@@ -9,11 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allReports = [];
 
-    // Load reports immediately
-    loadReports();
+    function showDashboard() {
+        landingScreen.style.opacity = '0';
+        landingScreen.style.transition = 'opacity 0.6s ease';
+        setTimeout(() => {
+            landingScreen.style.display = 'none';
+            dashboardScreen.style.display = 'block';
+        }, 600);
+        loadReports();
+        setInterval(loadReports, 60000);
+    }
 
-    // Auto-refresh every 60 seconds
-    setInterval(loadReports, 60000);
+    // Enter button — no email, just enter
+    enterBtn.addEventListener('click', showDashboard);
 
     async function loadReports() {
         try {
@@ -59,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Nav filtering — use currentTarget so clicking inner <span> still reads the button
+    // Nav filtering
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
             const btn = e.currentTarget;
@@ -70,22 +81,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Modal close button
+    // Close modal
     if (closeModal) {
-        closeModal.addEventListener('click', () => {
-            modal.close();
-            iframe.src = '';
-        });
+        closeModal.addEventListener('click', () => { modal.close(); iframe.src = ''; });
     }
-
-    // Close modal when clicking backdrop
     if (modal) {
         modal.addEventListener('click', (e) => {
             const rect = modal.getBoundingClientRect();
             if (e.clientX < rect.left || e.clientX > rect.right ||
                 e.clientY < rect.top  || e.clientY > rect.bottom) {
-                modal.close();
-                iframe.src = '';
+                modal.close(); iframe.src = '';
             }
         });
     }
