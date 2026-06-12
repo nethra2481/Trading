@@ -84,7 +84,6 @@ def purge_old_reports():
 def job_8am_generate_nifty_fno():
     try:
         print("--- Running 8:00 AM Job: Fetching Data and Generating Nifty/FNO Reports ---")
-        purge_old_reports()
         
         # 1. Fetch Shared Market Data
         market_data = data_ingestion.get_market_data()
@@ -125,7 +124,6 @@ def job_8am_generate_nifty_fno():
 def job_9am_send_nifty_fno_and_generate_intraday():
     try:
         print("--- Running 9:00 AM Job: Sending Nifty/FNO and Generating CNBC Awaaz Report ---")
-        purge_old_reports()
         
         run_date = datetime.datetime.now().strftime("%Y-%m-%d")
         
