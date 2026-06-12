@@ -22,46 +22,28 @@ def set_email():
 
 @app.route('/api/reports', methods=['GET'])
 def list_reports():
-    """Returns a list of all generated PDF reports categorized."""
-    files = os.listdir(REPORTS_DIR)
-    reports = []
-    
-    for f in files:
-        if f.endswith('.pdf'):
-            category = "Unknown"
-            if f.startswith('Nifty_'):
-                category = "Nifty"
-            elif f.startswith('FNO_'):
-                category = "FNO"
-            elif f.startswith('Intraday_'):
-                category = "Intraday"
-                
-            # Extract date if it matches our pattern *_YYYY-MM-DD.pdf
-            # e.g., Nifty_Daily_Analysis_2026-05-20.pdf
-            # Just grab the last part before .pdf
-            name_parts = f.replace('.pdf', '').split('_')
-            date_str = name_parts[-1] if len(name_parts) > 1 else "Unknown Date"
-            
-            # Use os.path.getmtime to get exact creation/modification time
-            mtime = os.path.getmtime(os.path.join(REPORTS_DIR, f))
-            
-            reports.append({
-                'filename': f,
-                'category': category,
-                'date_str': date_str,
-                'mtime': mtime
-            })
-            
-    # Sort by modification time descending (newest first)
-    reports.sort(key=lambda x: x['mtime'], reverse=True)
-    return jsonify(reports)
+    """Returns a list of all generated PDF reports categorized from the database."""
+    try:
+        reports = subscribers.get_all_reports_metadata()
+        return jsonify(reports)
+    except Exception as e:
+        print(f"Error fetching reports from DB: {e}")
+        return jsonify([]), 500
 
 @app.route('/api/reports/<filename>', methods=['GET'])
 def get_report(filename):
-    """Serves the requested PDF file."""
+    """Serves the requested PDF file directly from the database."""
     if not filename.endswith('.pdf'):
         return "Invalid file format", 400
-    return send_from_directory(REPORTS_DIR, filename)
+        
+    pdf_bytes = subscribers.get_report_bytes(filename)
+    if not pdf_bytes:
+        return "Report not found", 404
+        
+    return pdf_bytes, 200, {
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': f'inline; filename="{filename}"'
+    }
 
 @app.route('/api/subscribers', methods=['GET'])
 def list_subscribers():

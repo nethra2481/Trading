@@ -99,7 +99,8 @@ def job_8am_generate_nifty_fno():
         nifty_report_text = analysis.analyze_nifty(nifty_transcripts, nifty_news, market_data, gift_nifty, nifty_video_digest)
         date_str = datetime.datetime.now().strftime("%Y-%m-%d")
         nifty_filename = today_report_filename("Nifty")
-        reporting.create_pdf(nifty_report_text, nifty_filename, f"Daily Nifty Index Option Analysis ({date_str})")
+        _, pdf_bytes = reporting.create_pdf(nifty_report_text, nifty_filename, f"Daily Nifty Index Option Analysis ({date_str})")
+        subscribers.save_report("Nifty", date_str, nifty_filename, pdf_bytes)
         generated_files['nifty'] = nifty_filename
         print(f"Saved {nifty_filename}")
         
@@ -113,7 +114,8 @@ def job_8am_generate_nifty_fno():
         fno_report_text = analysis.analyze_fno(fno_transcripts, fno_news, market_data, gift_nifty, fno_video_digest)
         date_str = datetime.datetime.now().strftime("%Y-%m-%d")
         fno_filename = today_report_filename("FNO")
-        reporting.create_pdf(fno_report_text, fno_filename, f"Daily FNO Stock Trading Analysis ({date_str})")
+        _, pdf_bytes = reporting.create_pdf(fno_report_text, fno_filename, f"Daily FNO Stock Trading Analysis ({date_str})")
+        subscribers.save_report("FNO", date_str, fno_filename, pdf_bytes)
         generated_files['fno'] = fno_filename
         print(f"Saved {fno_filename}")
         
@@ -160,7 +162,8 @@ def job_9am_send_nifty_fno_and_generate_intraday():
         intraday_report_text = analysis.analyze_intraday(cnbc_transcript, cnbc_video_digest)
         intraday_filename = today_report_filename("Intraday")
         date_str = datetime.datetime.now().strftime("%Y-%m-%d")
-        reporting.create_pdf(intraday_report_text, intraday_filename, f"Daily Intraday Trading Analysis (CNBC Awaaz - {date_str})")
+        _, pdf_bytes = reporting.create_pdf(intraday_report_text, intraday_filename, f"Daily Intraday Trading Analysis (CNBC Awaaz - {date_str})")
+        subscribers.save_report("Intraday", date_str, intraday_filename, pdf_bytes)
         generated_files['intraday'] = intraday_filename
         print(f"Saved {intraday_filename}")
         

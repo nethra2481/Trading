@@ -72,10 +72,13 @@ def create_pdf(content, filename, report_title):
         pdf.set_x(pdf.l_margin)
         pdf.multi_cell(0, 6, txt=line)
 
-    pdf.output(filename)
-    return filename
+    pdf_bytes = pdf.output(dest="S").encode("latin1")
+    if filename:
+        with open(filename, "wb") as f:
+            f.write(pdf_bytes)
+    return filename, pdf_bytes
 
-def send_email(subject, body, attachment_path, recipient):
+def send_email(subject, body, attachment_path, recipient, pdf_bytes=None):
     """Sends an email with a PDF attachment using Gmail SMTP."""
     try:
         msg = EmailMessage()
@@ -84,10 +87,13 @@ def send_email(subject, body, attachment_path, recipient):
         msg['To'] = recipient
         msg.set_content(body)
 
-        if attachment_path and os.path.exists(attachment_path):
+        if pdf_bytes:
+            filename = os.path.basename(attachment_path) if attachment_path else "report.pdf"
+            msg.add_attachment(pdf_bytes, maintype='application', subtype='pdf', filename=filename)
+        elif attachment_path and os.path.exists(attachment_path):
             with open(attachment_path, 'rb') as f:
-                pdf_data = f.read()
-            msg.add_attachment(pdf_data, maintype='application', subtype='pdf', filename=os.path.basename(attachment_path))
+                data = f.read()
+            msg.add_attachment(data, maintype='application', subtype='pdf', filename=os.path.basename(attachment_path))
 
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
             server.login(EMAIL_ADDRESS, EMAIL_APP_PASSWORD)
