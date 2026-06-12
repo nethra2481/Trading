@@ -82,6 +82,10 @@ def purge_old_reports():
                     print(f"Failed to remove old report {filepath}: {e}")
 
 def job_8am_generate_nifty_fno():
+    if datetime.datetime.now().weekday() >= 5:
+        print("--- Weekend Detected. Skipping 8:00 AM Generation Job ---")
+        return
+        
     try:
         print("--- Running 8:00 AM Job: Fetching Data and Generating Nifty/FNO Reports ---")
         
@@ -124,6 +128,18 @@ def job_8am_generate_nifty_fno():
         print(f"ERROR in 8:00 AM Job: {e}")
 
 def job_9am_send_nifty_fno_and_generate_intraday():
+    if datetime.datetime.now().weekday() >= 5:
+        print("--- Weekend Detected. Sending Market Closed Email ---")
+        run_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        send_with_retry(
+            "WEEKEND",
+            "TradeZint Analytics: Market Closed Today",
+            "The Indian Stock Market is closed today as it is a weekend.\n\nNo algorithmic trading analysis or PDF reports will be generated today. Our systems will resume normal analysis on Monday morning.\n\nBest regards,\nTradeZint Technologies",
+            None,
+            run_date
+        )
+        return
+
     try:
         print("--- Running 9:00 AM Job: Sending Nifty/FNO and Generating CNBC Awaaz Report ---")
         
@@ -172,6 +188,10 @@ def job_9am_send_nifty_fno_and_generate_intraday():
         print(f"ERROR in 9:00 AM Job: {e}")
 
 def job_930am_send_intraday():
+    if datetime.datetime.now().weekday() >= 5:
+        print("--- Weekend Detected. Skipping 9:30 AM Intraday Job ---")
+        return
+        
     try:
         print("--- Running 9:30 AM Job: Sending CNBC Awaaz Report ---")
         
