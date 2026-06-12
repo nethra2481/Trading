@@ -167,13 +167,13 @@ def analyze_fno(transcripts, news, market_data, gift_nifty, video_digest=""):
 
 def analyze_intraday(transcript, video_digest=""):
     required_sections = [
-        "OVERALL VIEW FOR DAILY TRADING, INTRADAY TRADING AND SCALPING TRADING",
+        "OVERALL VIEW FOR DAILY OPTION TRADING AND INTRADAY SCALPING",
         "BEST BUY/SELL STRATEGY FOR CE/PE (LEG FORMAT)",
         "MAXIMUM PROFIT AND RISK ASSOCIATED",
     ]
     prompt = f"""
     You are an expert quantitative trader and financial analyst.
-    I need a daily analysis based on the morning CNBC Awaaz live stream from 7:00 AM to 9:00 AM.
+    I need a daily analysis for intraday OPTION TRADING and option scalping based on the morning CNBC Awaaz live stream from 7:00 AM to 9:00 AM.
 
     Transcript / Highlights from the stream:
     {transcript}
@@ -186,8 +186,8 @@ def analyze_intraday(transcript, video_digest=""):
     Avoid vague wording. Use specific levels and clear action points.
 
     The report MUST include these sections in this exact order and exact spelling:
-    OVERALL VIEW FOR DAILY TRADING, INTRADAY TRADING AND SCALPING TRADING
-    Summarize the general market sentiment and key actionable levels for intraday.
+    OVERALL VIEW FOR DAILY OPTION TRADING AND INTRADAY SCALPING
+    Summarize the general market sentiment and key actionable levels for intraday option trading.
 
     BEST BUY/SELL STRATEGY FOR CE/PE (LEG FORMAT)
     Provide exact option legs for actionable CE/PE setup.
