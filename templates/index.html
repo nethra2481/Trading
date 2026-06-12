@@ -77,7 +77,6 @@
                             <span class="dot"></span>
                             System Active
                         </div>
-                        <button id="profile-btn" class="settings-btn">⚙ Settings</button>
                     </div>
                 </header>
 
@@ -296,19 +295,7 @@
         <iframe id="pdf-iframe" src="" title="PDF Report"></iframe>
     </dialog>
 
-    <!-- Settings Modal -->
-    <dialog id="settings-modal" class="glass-modal">
-        <div class="modal-header">
-            <h3>Settings</h3>
-            <button id="close-settings-modal" class="close-btn">&times;</button>
-        </div>
-        <p class="settings-desc">Update the registered email address for daily report delivery.</p>
-        <div class="form-group">
-            <label for="update-client-email">Email Address</label>
-            <input type="email" id="update-client-email" placeholder="you@example.com">
-        </div>
-        <button id="save-settings-btn" class="save-btn"><span>Update Email</span></button>
-    </dialog>
+
 
     <script src="{{ url_for('static', filename='app.js') }}?v=5"></script>
 </body>
