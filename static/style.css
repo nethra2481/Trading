@@ -436,3 +436,73 @@ body {
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
 }
+
+/* Professional Footer */
+.professional-footer {
+    margin-top: 40px;
+    padding: 30px 20px;
+    background: rgba(10, 10, 10, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.footer-brand p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #fff;
+}
+
+.footer-disclaimer {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 20px;
+}
+
+.footer-disclaimer p {
+    color: #666;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.footer-disclaimer strong {
+    color: #999;
+}

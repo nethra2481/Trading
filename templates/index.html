@@ -60,9 +60,80 @@
                 </div>
             </header>
 
+            <!-- Live Market Ticker -->
+            <div class="tradingview-widget-container" style="margin-bottom: 20px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
+              <div class="tradingview-widget-container__widget"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+              {
+              "symbols": [
+                {"proName": "BSE:SENSEX", "title": "Sensex"},
+                {"proName": "NSE:NIFTY", "title": "Nifty 50"},
+                {"proName": "NSE:BANKNIFTY", "title": "Bank Nifty"},
+                {"description": "Reliance", "proName": "NSE:RELIANCE"},
+                {"description": "HDFC Bank", "proName": "NSE:HDFCBANK"}
+              ],
+              "showSymbolLogo": true,
+              "isTransparent": true,
+              "displayMode": "adaptive",
+              "colorTheme": "dark",
+              "locale": "in"
+            }
+              </script>
+            </div>
+
+            <!-- Advanced Market Chart -->
+            <div class="chart-section" style="margin-bottom: 30px;">
+                <div class="tradingview-widget-container" style="height: 450px; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                  <div id="tradingview_chart" style="height: 100%; width: 100%;"></div>
+                  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                  <script type="text/javascript">
+                  new TradingView.widget({
+                  "autosize": true,
+                  "symbol": "NSE:NIFTY",
+                  "interval": "D",
+                  "timezone": "Asia/Kolkata",
+                  "theme": "dark",
+                  "style": "1",
+                  "locale": "in",
+                  "enable_publishing": false,
+                  "backgroundColor": "#121212",
+                  "gridColor": "rgba(255, 255, 255, 0.06)",
+                  "hide_top_toolbar": false,
+                  "hide_legend": false,
+                  "save_image": false,
+                  "container_id": "tradingview_chart"
+                });
+                  </script>
+                </div>
+            </div>
+
+            <!-- Section Title for Reports -->
+            <div class="section-title" style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                <h3 style="font-size: 1.2rem; font-weight: 600; color: #fff;">Algorithmic Research PDFs</h3>
+            </div>
+
             <div class="reports-grid" id="reports-grid">
                 <!-- Report cards will be dynamically injected here by JS -->
             </div>
+
+            <!-- Professional Footer -->
+            <footer class="professional-footer">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <span class="footer-logo">TradeZint</span>
+                        <p>Advanced Quantitative Models & Algorithmic Insights</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Risk Disclosure</a>
+                    </div>
+                </div>
+                <div class="footer-disclaimer">
+                    <p><strong>RISK WARNING:</strong> Trading in equities, options, and futures involves substantial risk of loss and is not suitable for all investors. Past performance is not indicative of future results. TradeZint provides automated quantitative analysis for educational and informational purposes only. We are not SEBI registered financial advisors. Please consult a certified financial planner before making any investment decisions.</p>
+                    <p>&copy; 2026 TradeZint Technologies. All rights reserved.</p>
+                </div>
+            </footer>
         </main>
     </div>
 
