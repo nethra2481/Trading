@@ -32,9 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Auto-bypass if email already saved
-    if (localStorage.getItem('clientEmail')) {
-        showDashboard();
+    // Pre-fill email if already registered
+    const savedEmail = localStorage.getItem('clientEmail');
+    if (savedEmail) {
+        emailInput.value = savedEmail;
     }
 
     // Login button click
