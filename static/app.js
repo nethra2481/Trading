@@ -11,10 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return regex.test(email);
     }
 
-    // If email already exists, keep landing visible but hide input box.
-    // User can continue to dashboard from landing screen.
+    // Auto-bypass landing if already authenticated
     if (localStorage.getItem('clientEmail')) {
-        landingEmailGroup.classList.add('hidden');
+        landingScreen.classList.add('hidden');
+        dashboardScreen.classList.add('visible');
     }
 
     enterBtn.addEventListener('click', async () => {
