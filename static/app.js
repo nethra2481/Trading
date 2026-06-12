@@ -56,6 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Load reports once dashboard is visible
         loadReports();
+        
+        // Auto-refresh reports every 60 seconds (1 minute)
+        setInterval(() => {
+            console.log("Auto-refreshing reports...");
+            loadReports();
+        }, 60000);
     });
 
     // Dashboard Logic
