@@ -109,12 +109,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Nav filtering
+    // Nav filtering — use currentTarget so clicking inner <span> still reads the button
     navItems.forEach(item => {
         item.addEventListener('click', (e) => {
+            const btn = e.currentTarget;
             navItems.forEach(n => n.classList.remove('active'));
-            e.target.classList.add('active');
-            const cat = e.target.dataset.category;
+            btn.classList.add('active');
+            const cat = btn.dataset.category;
             renderReports(cat === 'All' ? allReports : allReports.filter(r => r.category === cat));
         });
     });
