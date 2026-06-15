@@ -1,97 +1,136 @@
-document.addEventListener('DOMContentLoaded', () => {
+const state = { reports: [], category: 'All' };
 
-    const landingScreen = document.getElementById('landing-screen');
-    const dashboardScreen = document.getElementById('dashboard-screen');
-    const enterBtn = document.getElementById('enter-btn');
-    const reportsGrid = document.getElementById('reports-grid');
-    const navItems = document.querySelectorAll('.nav-item');
-    const modal = document.getElementById('pdf-modal');
-    const closeModal = document.getElementById('close-modal');
-    const iframe = document.getElementById('pdf-iframe');
-    const modalTitle = document.getElementById('modal-title');
+const els = {
+    status: document.getElementById('system-status'),
+    subscriberCount: document.getElementById('subscriber-count'),
+    reportCount: document.getElementById('report-count'),
+    schedule: document.getElementById('schedule'),
+    integrations: document.getElementById('integrations'),
+    logs: document.getElementById('logs'),
+    reports: document.getElementById('reports'),
+    form: document.getElementById('subscriber-form'),
+    email: document.getElementById('email'),
+    message: document.getElementById('subscriber-message'),
+    modal: document.getElementById('pdf-modal'),
+    frame: document.getElementById('pdf-frame'),
+    modalTitle: document.getElementById('modal-title'),
+    closeModal: document.getElementById('close-modal'),
+};
 
-    let allReports = [];
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+    }[char]));
+}
 
-    function showDashboard() {
-        landingScreen.style.opacity = '0';
-        landingScreen.style.transition = 'opacity 0.6s ease';
-        setTimeout(() => {
-            landingScreen.style.display = 'none';
-            dashboardScreen.style.display = 'block';
-        }, 600);
-        loadReports();
-        setInterval(loadReports, 60000);
+async function getJson(url, options) {
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error(`${url} failed`);
+    return response.json();
+}
+
+function renderStatus(data) {
+    els.subscriberCount.textContent = data.subscriber_count;
+    els.status.textContent = data.subscriber_count ? 'System active' : 'Needs subscriber';
+    els.status.classList.toggle('degraded', !data.subscriber_count);
+    els.schedule.innerHTML = data.scheduler.map((item) => `
+        <div class="timeline-row">
+            <time>${escapeHtml(item.time)}</time>
+            <div>
+                <strong>${escapeHtml(item.label)}</strong>
+                <p>${escapeHtml(item.delivery)}</p>
+            </div>
+            <span>Weekdays</span>
+        </div>
+    `).join('');
+    els.integrations.innerHTML = Object.entries(data.integrations).map(([key, ready]) => `
+        <div class="integration-row ${ready ? 'ready' : 'missing'}">
+            <span>${escapeHtml(key.replaceAll('_', ' '))}</span>
+            <strong>${ready ? 'Ready' : 'Config needed'}</strong>
+        </div>
+    `).join('');
+    els.logs.innerHTML = data.latest_logs.length ? data.latest_logs.map((log) => `
+        <div class="log-row ${log.status === 'SUCCESS' ? 'success' : 'failed'}">
+            <div>
+                <strong>${escapeHtml(log.report_type)}</strong>
+                <p>${escapeHtml(log.email)} · ${escapeHtml(log.created_at)}</p>
+            </div>
+            <span>${escapeHtml(log.status)}</span>
+        </div>
+    `).join('') : '<div class="empty">No delivery logs yet.</div>';
+}
+
+function renderReports() {
+    const reports = state.category === 'All'
+        ? state.reports
+        : state.reports.filter((report) => report.category === state.category);
+    els.reportCount.textContent = `${reports.length} report${reports.length === 1 ? '' : 's'}`;
+    if (!reports.length) {
+        els.reports.innerHTML = '<div class="empty">No generated PDFs found for this category.</div>';
+        return;
     }
-
-    // Enter button — no email, just enter
-    enterBtn.addEventListener('click', showDashboard);
-
-    async function loadReports() {
-        try {
-            const response = await fetch('/api/reports');
-            allReports = await response.json();
-            renderReports(allReports);
-        } catch (error) {
-            console.error('Failed to fetch reports:', error);
-        }
-    }
-
-    function formatFilename(filename) {
-        return filename.replace('.pdf', '').replace(/_/g, ' ');
-    }
-
-    function renderReports(reports) {
-        const countEl = document.getElementById('report-count');
-        if (countEl) countEl.textContent = reports.length + ' reports';
-        reportsGrid.innerHTML = '';
-
-        if (reports.length === 0) {
-            reportsGrid.innerHTML = '<div class="no-reports"><p>No reports yet. First reports will be generated at 9:00 AM IST on the next trading day.</p></div>';
-            return;
-        }
-
-        reports.forEach(report => {
-            const card = document.createElement('div');
-            card.className = 'report-card';
-            card.innerHTML = `
-                <div class="card-header">
-                    <span class="category-tag tag-${report.category}">${report.category}</span>
-                    <span class="report-date">${report.date_str}</span>
-                </div>
-                <div class="report-title">${formatFilename(report.filename)}</div>
-                <div class="card-cta">View Report &rarr;</div>
-            `;
-            card.addEventListener('click', () => {
-                modalTitle.textContent = formatFilename(report.filename);
-                iframe.src = `/api/reports/${report.filename}`;
-                modal.showModal();
-            });
-            reportsGrid.appendChild(card);
-        });
-    }
-
-    // Nav filtering
-    navItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-            const btn = e.currentTarget;
-            navItems.forEach(n => n.classList.remove('active'));
-            btn.classList.add('active');
-            const cat = btn.dataset.category;
-            renderReports(cat === 'All' ? allReports : allReports.filter(r => r.category === cat));
+    els.reports.innerHTML = reports.map((report) => `
+        <button class="report-card" data-id="${report.id}" data-title="${escapeHtml(report.title)}">
+            <span>${escapeHtml(report.category)}</span>
+            <strong>${escapeHtml(report.title)}</strong>
+            <p>${escapeHtml(report.created_at)}</p>
+        </button>
+    `).join('');
+    document.querySelectorAll('.report-card').forEach((card) => {
+        card.addEventListener('click', () => {
+            els.modalTitle.textContent = card.dataset.title;
+            els.frame.src = `/api/reports/${card.dataset.id}/download`;
+            els.modal.showModal();
         });
     });
+}
 
-    // Close modal
-    if (closeModal) {
-        closeModal.addEventListener('click', () => { modal.close(); iframe.src = ''; });
+async function load() {
+    try {
+        renderStatus(await getJson('/api/status'));
+        state.reports = await getJson('/api/reports');
+        renderReports();
+    } catch (error) {
+        console.error(error);
+        els.status.textContent = 'Status unavailable';
+        els.status.classList.add('degraded');
     }
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            const rect = modal.getBoundingClientRect();
-            if (e.clientX < rect.left || e.clientX > rect.right ||
-                e.clientY < rect.top  || e.clientY > rect.bottom) {
-                modal.close(); iframe.src = '';
-            }
+}
+
+document.querySelectorAll('.nav-item').forEach((button) => {
+    button.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach((item) => item.classList.remove('active'));
+        button.classList.add('active');
+        state.category = button.dataset.category;
+        renderReports();
+    });
+});
+
+els.form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    els.message.textContent = 'Saving...';
+    try {
+        await getJson('/api/subscribers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: els.email.value }),
         });
+        els.email.value = '';
+        els.message.textContent = 'Subscriber saved.';
+        await load();
+    } catch (error) {
+        els.message.textContent = 'Enter a valid email address.';
     }
 });
+
+els.closeModal.addEventListener('click', () => {
+    els.modal.close();
+    els.frame.src = '';
+});
+
+load();
+setInterval(load, 60000);

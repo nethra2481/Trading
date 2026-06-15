@@ -3,334 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TradeZint — Algorithmic Trading Analytics</title>
-    <meta name="description" content="Institutional-grade automated quantitative analysis for Nifty, FNO, and intraday option trading.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=5">
+    <title>TradeZint Daily Trading Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-
-    <!-- Animated Ambient Background (always visible behind everything) -->
-    <div class="ambient-bg">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-    </div>
-
-    <!-- ===== LANDING SCREEN ===== -->
-    <div id="landing-screen">
-        <div class="landing-hero">
-            <div class="landing-logo">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                </svg>
-                <span>TradeZint</span>
-            </div>
-
-            <div class="hero-content">
-                <div class="hero-tag">NSE &bull; BSE &bull; Options Trading</div>
-                <h1 class="hero-title">AI-Powered Daily<br>Option Trading Analysis</h1>
-                <p class="hero-desc">
-                    Get institutional-grade Nifty, FNO &amp; Intraday option strategies delivered to your inbox every morning — with CE/PE leg format, max profit, max risk, and key levels.
-                </p>
-
-                <div class="hero-features">
-                    <div class="feature-item">
-                        <div class="feature-icon">📈</div>
-                        <div>
-                            <div class="feature-title">Nifty Weekly Options</div>
-                            <div class="feature-desc">CE/PE strategies for nearest weekly expiry</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">💹</div>
-                        <div>
-                            <div class="feature-title">FNO Monthly Options</div>
-                            <div class="feature-desc">Top FNO stocks with leg-wise option setups</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">⚡</div>
-                        <div>
-                            <div class="feature-title">Intraday Scalping</div>
-                            <div class="feature-desc">Based on CNBC Awaaz 7–9 AM live analysis</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon">🤖</div>
-                        <div>
-                            <div class="feature-title">Gemini 2.5 AI</div>
-                            <div class="feature-desc">Top YouTube videos + live market data</div>
-                        </div>
-                    </div>
-                </div>
-
-                <button id="enter-btn">Enter Dashboard &rarr;</button>
-                <p class="hero-note">Reports delivered at 9:00 AM &amp; 9:30 AM IST every trading day</p>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark">TZ</div>
+            <div>
+                <strong>TradeZint</strong>
+                <span>Daily Trading Analysis</span>
             </div>
         </div>
-    </div>
+        <nav>
+            <button class="nav-item active" data-category="All">All Reports</button>
+            <button class="nav-item" data-category="Nifty">Nifty Weekly</button>
+            <button class="nav-item" data-category="FNO">FNO Monthly</button>
+            <button class="nav-item" data-category="Intraday">CNBC Intraday</button>
+        </nav>
+        <form id="subscriber-form" class="subscriber-form">
+            <label for="email">Email Inbox</label>
+            <div>
+                <input id="email" type="email" placeholder="trader@example.com" required>
+                <button type="submit">Add</button>
+            </div>
+            <p id="subscriber-message">Add an inbox for daily PDF delivery.</p>
+        </form>
+        <p class="risk-note">Educational analysis only. Not SEBI registered investment advice.</p>
+    </aside>
 
-    <!-- ===== DASHBOARD SCREEN ===== -->
-    <div id="dashboard-screen">
-        <div class="app-layout">
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <h1>Daily Trading Analysis Command Center</h1>
+                <p>Nifty weekly options, FNO monthly options, and CNBC Awaaz intraday scalping PDFs.</p>
+            </div>
+            <div id="system-status" class="status-pill">Loading</div>
+        </header>
 
+        <section class="metric-grid">
+            <article>
+                <span>Data Capture</span>
+                <strong>08:00 AM IST</strong>
+                <p>Gift Nifty, Dow Futures, Crude, DXY, US 10Y, India VIX, news, and YouTube.</p>
+            </article>
+            <article>
+                <span>Nifty + FNO Email</span>
+                <strong>09:00 AM IST</strong>
+                <p>Weekly Nifty and monthly FNO option reports with CE/PE legs.</p>
+            </article>
+            <article>
+                <span>Intraday Email</span>
+                <strong>09:30 AM IST</strong>
+                <p>CNBC Awaaz 7:00-9:00 AM converted to intraday and scalping plans.</p>
+            </article>
+            <article>
+                <span>Subscribers</span>
+                <strong id="subscriber-count">--</strong>
+                <p>Active email recipients.</p>
+            </article>
+        </section>
 
-            <!-- Sidebar -->
-            <aside class="sidebar">
-                <div class="logo">
-                    <div class="logo-icon">📈</div>
-                    <h1>TradeZint</h1>
-                </div>
-                <div class="nav-section-label">Reports</div>
-                <nav class="nav-menu">
-                    <button class="nav-item active" data-category="All">
-                        <span>📊</span> All Reports
-                    </button>
-                    <button class="nav-item" data-category="Nifty">
-                        <span>📈</span> Nifty Weekly
-                    </button>
-                    <button class="nav-item" data-category="FNO">
-                        <span>💹</span> FNO Monthly
-                    </button>
-                    <button class="nav-item" data-category="Intraday">
-                        <span>⚡</span> CNBC Intraday
-                    </button>
-                </nav>
-            </aside>
-
-            <!-- Main Content -->
-            <main class="main-content">
-
-                <!-- Top Header -->
-                <header class="top-header">
-                    <h2>Daily Analysis Reports</h2>
-                    <div class="header-right">
-                        <div class="status-badge">
-                            <span class="dot"></span>
-                            System Active
-                        </div>
-                    </div>
-                </header>
-
-                <!-- Market Widgets -->
-                <div class="widgets-area">
-                    <!-- Live Ticker Tape -->
-                    <div class="widget-row">
-                        <div class="tradingview-widget-container">
-                            <div class="tradingview-widget-container__widget"></div>
-                            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-                            {
-                              "symbols": [
-                                {"proName":"BSE:SENSEX","title":"Sensex"},
-                                {"proName":"NSE:NIFTY","title":"Nifty 50"},
-                                {"proName":"NSE:BANKNIFTY","title":"Bank Nifty"},
-                                {"description":"India VIX","proName":"NSE:INDIAVIX"},
-                                {"description":"Reliance","proName":"NSE:RELIANCE"},
-                                {"description":"HDFC Bank","proName":"NSE:HDFCBANK"},
-                                {"description":"TCS","proName":"NSE:TCS"}
-                              ],
-                              "showSymbolLogo": true,
-                              "isTransparent": true,
-                              "displayMode": "adaptive",
-                              "colorTheme": "dark",
-                              "locale": "in"
-                            }
-                            </script>
-                        </div>
-                    </div>
-
-                    <!-- Nifty Chart -->
-                    <div class="chart-wrapper">
-                        <div id="tradingview_chart" style="height:100%;width:100%;"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                        <script type="text/javascript">
-                        new TradingView.widget({
-                            "autosize": true,
-                            "symbol": "NSE:NIFTY",
-                            "interval": "D",
-                            "timezone": "Asia/Kolkata",
-                            "theme": "dark",
-                            "style": "1",
-                            "locale": "in",
-                            "enable_publishing": false,
-                            "backgroundColor": "rgba(10,10,16,1)",
-                            "gridColor": "rgba(255,255,255,0.05)",
-                            "hide_top_toolbar": false,
-                            "save_image": false,
-                            "container_id": "tradingview_chart"
-                        });
-                        </script>
-                    </div>
-
-                    <!-- Toolkit Panels -->
-                    <div class="toolkit-grid">
-                        <div class="toolkit-panel">
-                            <div class="toolkit-title">📅 Macro Events</div>
-                            <div class="tradingview-widget-container">
-                                <div class="tradingview-widget-container__widget"></div>
-                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
-                                {
-                            <div class="toolkit-title">📡 Nifty Technicals</div>
-                            <div class="tradingview-widget-container">
-                                <div class="tradingview-widget-container__widget"></div>
-                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-                                {
-                                  "interval":"1D","width":"100%","isTransparent":true,
-                                  "height":"350","symbol":"NSE:NIFTY",
-                                  "showIntervalTabs":true,"displayMode":"single",
-                                  "locale":"in","colorTheme":"dark"
-                                }
-                                </script>
-                            </div>
-                        </div>
-
-                        <div class="toolkit-panel">
-                            <div class="toolkit-title">🏦 Bank Nifty Technicals</div>
-                            <div class="tradingview-widget-container">
-                                <div class="tradingview-widget-container__widget"></div>
-                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-                                {
-                                  "interval":"1D","width":"100%","isTransparent":true,
-                                  "height":"350","symbol":"NSE:BANKNIFTY",
-                                  "showIntervalTabs":true,"displayMode":"single",
-                                  "locale":"in","colorTheme":"dark"
-                                }
-                                </script>
-                            </div>
-                        </div>
-
-                        <div class="toolkit-panel">
-                            <div class="toolkit-title">💹 Fin Nifty Technicals</div>
-                            <div class="tradingview-widget-container">
-                                <div class="tradingview-widget-container__widget"></div>
-                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-                                {
-                                  "interval":"1D","width":"100%","isTransparent":true,
-                                  "height":"350","symbol":"NSE:FINNIFTY",
-                                  "showIntervalTabs":true,"displayMode":"single",
-                                  "locale":"in","colorTheme":"dark"
-                                }
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Row 2: India VIX + Nifty Heatmap + Options Info -->
-                    <div class="toolkit-grid" style="margin-top:20px;">
-                        <div class="toolkit-panel">
-                            <div class="toolkit-title">🌡 India VIX — Options Volatility</div>
-                            <div class="tradingview-widget-container">
-                                <div class="tradingview-widget-container__widget"></div>
-                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js" async>
-                                {
-                                  "symbol":"NSE:INDIAVIX","width":"100%","height":"220",
-                                  "locale":"in","dateRange":"3M","colorTheme":"dark",
-                                  "isTransparent":true,"autosize":true,"largeChartUrl":""
-                                }
-                                </script>
-                            </div>
-                        </div>
-
-                        <div class="toolkit-panel">
-                            <div class="toolkit-title">🔥 Nifty 50 Heatmap</div>
-                            <div class="tradingview-widget-container">
-                                <div class="tradingview-widget-container__widget"></div>
-                                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
-                                {
-                                  "exchanges":["NSE"],"dataSource":"NIFTY50","grouping":"sector",
-                                  "blockSize":"market_cap_basic","blockColor":"change","locale":"in",
-                                  "symbolUrl":"","colorTheme":"dark","hasTopBar":false,
-                                  "isDataSetEnabled":false,"isZoomEnabled":true,"hasSymbolTooltip":true,
-                                  "width":"100%","height":"350"
-                                }
-                                </script>
-                            </div>
-                        </div>
-
-                        <div class="toolkit-panel options-info-panel">
-                            <div class="toolkit-title">⚡ Options Trading Signals</div>
-                            <div class="options-info-grid">
-                                <div class="info-block">
-                                    <div class="info-label">REPORT SCHEDULE</div>
-                                    <div class="info-value">9:00 AM IST</div>
-                                    <div class="info-sub">Daily PDF Delivery</div>
-                                </div>
-                                <div class="info-block">
-                                    <div class="info-label">DATA CAPTURE</div>
-                                    <div class="info-value">8:00 AM IST</div>
-                                    <div class="info-sub">Gift Nifty · Dow Futures · DXY · Crude</div>
-                                </div>
-                                <div class="info-block">
-                                    <div class="info-label">EXPIRY FOCUS</div>
-                                    <div class="info-value">Weekly CE/PE</div>
-                                    <div class="info-sub">Nearest Expiry · Nifty &amp; FNO</div>
-                                </div>
-                                <div class="info-block">
-                                    <div class="info-label">INTRADAY ANALYSIS</div>
-                                    <div class="info-value">9:30 AM IST</div>
-                                    <div class="info-sub">CNBC Awaaz · Pehla Sauda</div>
-                                </div>
-                                <div class="info-block">
-                                    <div class="info-label">STRATEGY FORMAT</div>
-                                    <div class="info-value">Leg-wise</div>
-                                    <div class="info-sub">Max Profit · Max Risk · Strike</div>
-                                </div>
-                                <div class="info-block">
-                                    <div class="info-label">AI MODEL</div>
-                                    <div class="info-value">Gemini 2.5</div>
-                                    <div class="info-sub">Flash · Real-time Analysis</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                <!-- Reports Section -->
-                <div class="reports-section">
-                    <div class="section-header">
-                        <h3>Algorithmic Research PDFs</h3>
-                        <span id="report-count" class="count">Loading...</span>
-                    </div>
-                    <div class="reports-grid" id="reports-grid">
-                        <div class="no-reports"><p>Loading reports...</p></div>
+        <section class="grid-two">
+            <article class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Automation Pipeline</h2>
+                        <p>Weekday jobs run in Asia/Kolkata.</p>
                     </div>
                 </div>
-
-                <!-- Footer -->
-                <footer class="professional-footer">
-                    <div class="footer-top">
-                        <div class="footer-brand">
-                            <div class="footer-brand-name">TradeZint</div>
-                            <p>Advanced Quantitative Models &amp; Algorithmic Insights</p>
-                        </div>
-                        <div class="footer-links">
-                            <a href="#">Terms of Service</a>
-                            <a href="#">Privacy Policy</a>
-                            <a href="#">Risk Disclosure</a>
-                        </div>
+                <div id="schedule" class="timeline"></div>
+            </article>
+            <article class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Integration Readiness</h2>
+                        <p>Keys and services needed for live automation.</p>
                     </div>
-                    <div class="footer-disclaimer">
-                        <p><strong>RISK WARNING:</strong> Trading in equities, options, and futures involves substantial risk of loss and is not suitable for all investors. Past performance is not indicative of future results. TradeZint provides automated quantitative analysis for educational and informational purposes only. We are not SEBI registered financial advisors. Please consult a certified financial planner before making any investment decisions.</p>
-                        <p style="margin-top:8px; color:#444;">&copy; 2026 TradeZint Technologies Pvt. Ltd. All rights reserved.</p>
-                    </div>
-                </footer>
+                </div>
+                <div id="integrations" class="integration-list"></div>
+            </article>
+        </section>
 
-            </main>
-        </div>
-    </div>
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Strategy Output Contract</h2>
+                    <p>Each report includes expiry view, CE/PE legs, maximum profit, maximum risk, and trade management.</p>
+                </div>
+            </div>
+            <div class="contract-table">
+                <div><strong>Nifty Index Options</strong><span>Nearest weekly expiry</span><span>Buy/Sell CE/PE leg format</span></div>
+                <div><strong>FNO Stock Options</strong><span>Nearest monthly expiry</span><span>Stock-wise CE/PE leg format</span></div>
+                <div><strong>CNBC Awaaz Intraday</strong><span>Same-day trading</span><span>Intraday and scalping CE/PE setups</span></div>
+            </div>
+        </section>
 
-    <!-- PDF Viewer Modal -->
-    <dialog id="pdf-modal" class="glass-modal">
-        <div class="modal-header">
-            <h3 id="modal-title">Report</h3>
-            <button id="close-modal" class="close-btn">&times;</button>
-        </div>
-        <iframe id="pdf-iframe" src="" title="PDF Report"></iframe>
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Generated PDF Reports</h2>
+                    <p>Open generated analysis from local report storage.</p>
+                </div>
+                <span id="report-count">Loading</span>
+            </div>
+            <div id="reports" class="report-grid"></div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <div>
+                    <h2>Recent Delivery Activity</h2>
+                    <p>Email success and failure logs.</p>
+                </div>
+            </div>
+            <div id="logs" class="logs"></div>
+        </section>
+    </main>
+
+    <dialog id="pdf-modal">
+        <header>
+            <strong id="modal-title">Report</strong>
+            <button id="close-modal">Close</button>
+        </header>
+        <iframe id="pdf-frame" title="PDF report"></iframe>
     </dialog>
 
-
-
-    <script src="{{ url_for('static', filename='app.js') }}?v=5"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>

@@ -1,53 +1,88 @@
-import os
-from flask import Flask, jsonify, render_template, send_from_directory, request
-import subscribers
+from flask import Flask, jsonify, render_template, request, send_file
+from dotenv import load_dotenv
 
+from tradezint.config import get_settings
+from tradezint.jobs import generate_report_job, send_latest_reports
+from tradezint.store import Store
+
+load_dotenv()
+
+settings = get_settings()
 app = Flask(__name__)
+app.config["SECRET_KEY"] = settings.app_secret_key
+store = Store(settings.database_path)
+store.init_db()
 
-# Directory where the PDFs are generated (current directory)
-REPORTS_DIR = os.path.dirname(os.path.abspath(__file__))
-subscribers.init_db()
 
-@app.route('/')
+@app.get("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/api/set_email', methods=['POST'])
-def set_email():
-    data = request.json
-    email = (data.get('email') or "").strip().lower()
-    if subscribers.upsert_subscriber(email):
-        return jsonify({'status': 'success'})
-    return jsonify({'status': 'error'}), 400
 
-@app.route('/api/reports', methods=['GET'])
-def list_reports():
-    """Returns a list of all generated PDF reports categorized from the database."""
-    try:
-        reports = subscribers.get_all_reports_metadata()
-        return jsonify(reports)
-    except Exception as e:
-        print(f"Error fetching reports from DB: {e}")
-        return jsonify([]), 500
+@app.get("/api/status")
+def status():
+    return jsonify({
+        "timezone": settings.timezone,
+        "scheduler": [
+            {"time": "08:00", "label": "Generate Nifty and FNO reports", "delivery": "Internal"},
+            {"time": "09:00", "label": "Email Nifty and FNO reports", "delivery": "PDF email"},
+            {"time": "09:30", "label": "Email CNBC Awaaz intraday report", "delivery": "PDF email"},
+        ],
+        "integrations": settings.integration_status(),
+        "subscriber_count": len(store.list_subscribers()),
+        "report_count": len(store.list_reports()),
+        "latest_logs": store.list_delivery_logs(limit=10),
+    })
 
-@app.route('/api/reports/<filename>', methods=['GET'])
-def get_report(filename):
-    """Serves the requested PDF file directly from the database."""
-    if not filename.endswith('.pdf'):
-        return "Invalid file format", 400
-        
-    pdf_bytes = subscribers.get_report_bytes(filename)
-    if not pdf_bytes:
-        return "Report not found", 404
-        
-    return pdf_bytes, 200, {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': f'inline; filename="{filename}"'
-    }
 
-@app.route('/api/subscribers', methods=['GET'])
-def list_subscribers():
-    return jsonify({"subscribers": subscribers.get_active_emails()})
+@app.get("/api/reports")
+def reports():
+    category = request.args.get("category")
+    return jsonify(store.list_reports(category=category if category != "All" else None))
 
-if __name__ == '__main__':
-    app.run(debug=False, port=5000)
+
+@app.get("/api/reports/<int:report_id>/download")
+def download_report(report_id):
+    report = store.get_report(report_id)
+    if not report:
+        return jsonify({"error": "Report not found"}), 404
+    return send_file(
+        report["path"],
+        mimetype="application/pdf",
+        as_attachment=False,
+        download_name=report["filename"],
+    )
+
+
+@app.get("/api/subscribers")
+def subscribers():
+    return jsonify({"subscribers": store.list_subscribers()})
+
+
+@app.post("/api/subscribers")
+def add_subscriber():
+    payload = request.get_json(silent=True) or {}
+    email = (payload.get("email") or "").strip().lower()
+    if not store.add_subscriber(email):
+        return jsonify({"error": "Enter a valid email address"}), 400
+    return jsonify({"status": "saved", "email": email})
+
+
+@app.post("/api/run/<report_type>")
+def run_report(report_type):
+    if report_type not in {"nifty", "fno", "intraday"}:
+        return jsonify({"error": "Unknown report type"}), 404
+    report = generate_report_job(report_type, store, settings)
+    return jsonify(report)
+
+
+@app.post("/api/send/<report_type>")
+def send_report(report_type):
+    if report_type not in {"nifty", "fno", "intraday", "all"}:
+        return jsonify({"error": "Unknown report type"}), 404
+    result = send_latest_reports(report_type, store, settings)
+    return jsonify(result)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=False)

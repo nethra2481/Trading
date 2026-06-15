@@ -1,7 +1,10 @@
-venv/
 .env
-*.pdf
 *.db
+*.sqlite3
 __pycache__/
+*.pyc
+.venv/
+venv/
+reports/
 *.log
 .DS_Store
